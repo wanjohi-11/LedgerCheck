@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta name="description" content="LedgerCheck is a browser-based journal and ledger sanity checker for balancing, duplicates and malformed accounting rows." />
+  <title>LedgerCheck — Catch ledger issues before they spread</title>
+  <link rel="canonical" href="https://ledgercheck.valron.co.ke/" />
+  <meta property="og:title" content="LedgerCheck — Catch ledger issues before they spread" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://ledgercheck.valron.co.ke/" />
+  <meta name="twitter:card" content="summary" />
+  <link rel="icon" href="assets/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="assets/styles.css" />
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <a class="brand" href="#top"><span class="brand-mark">LC</span><span><strong>LedgerCheck</strong><small>by Valron Labs</small></span></a>
+      <nav><a href="#workspace">Checker</a><a href="#rules">Rules</a><a href="#deploy">Deploy</a><a class="ghost" href="https://github.com/wanjohi-11" target="_blank" rel="noreferrer">GitHub</a></nav>
+    </header>
+
+    <main id="top">
+      <section class="hero">
+        <div class="hero-copy">
+          <span class="eyebrow">LEDGER SANITY CHECKER</span>
+          <h1>Find the journal entries that <em>do not add up.</em></h1>
+          <p>Load a simple CSV export and LedgerCheck tests balances, journal references, duplicates, malformed amounts and suspicious rows locally in your browser.</p>
+          <div class="hero-actions"><a class="primary" href="#workspace">Check a ledger</a><button class="secondary" id="sampleTop">Run sample</button></div>
+          <div class="trust-row"><span>✓ Local processing</span><span>✓ No accounting login</span><span>✓ Exportable findings</span></div>
+        </div>
+        <div class="hero-card">
+          <div class="mini-title"><span>Reconciliation snapshot</span><span class="status warn">2 issues</span></div>
+          <div class="metric-row"><div><small>Total debits</small><b>KES 286,500.00</b></div><div><small>Total credits</small><b>KES 286,350.00</b></div></div>
+          <div class="delta"><span>Difference</span><b>KES 150.00</b></div>
+          <div class="journal-lines"><div><span>JV-1004</span><span>Office supplies</span><b class="bad">Unbalanced</b></div><div><span>JV-1005</span><span>Client receipt</span><b class="good">Balanced</b></div><div><span>JV-1006</span><span>Bank fees</span><b class="good">Balanced</b></div></div>
+        </div>
+      </section>
+
+      <section class="workspace" id="workspace">
+        <div class="section-head"><div><span class="eyebrow">WORKSPACE</span><h2>Run ledger checks</h2></div><span class="privacy-pill">Your CSV is not uploaded</span></div>
+
+        <div class="upload-panel panel">
+          <div class="upload-copy"><strong>CSV input</strong><span>Expected columns: date, reference, account, description, debit, credit</span></div>
+          <div class="button-row"><label class="secondary small">Open CSV<input id="csvFile" type="file" accept=".csv,text/csv" hidden /></label><button id="loadSample" class="secondary small">Load sample</button><button id="runCheck" class="primary small">Run checks</button></div>
+        </div>
+
+        <div class="input-grid">
+          <div class="panel editor-panel">
+            <div class="panel-head"><div><strong>Ledger rows</strong><small>Edit, paste or import CSV data</small></div><button class="tiny" id="clearData">Clear</button></div>
+            <textarea id="csvInput" spellcheck="false" aria-label="CSV ledger data"></textarea>
+          </div>
+          <div class="panel summary-panel">
+            <div class="panel-head"><div><strong>Control totals</strong><small>Across parsed rows</small></div><span id="overallState" class="state">Ready</span></div>
+            <div class="big-balance"><small>Net difference</small><b id="difference">—</b><span id="differenceText">Load data to calculate</span></div>
+            <div class="summary-grid"><div><small>Debit</small><b id="debitTotal">0.00</b></div><div><small>Credit</small><b id="creditTotal">0.00</b></div><div><small>Rows</small><b id="rowCount">0</b></div><div><small>Journals</small><b id="journalCount">0</b></div></div>
+          </div>
+        </div>
+
+        <div class="results-grid">
+          <div class="panel span-2">
+            <div class="panel-head"><div><strong>Journal review</strong><small>Grouped by reference</small></div></div>
+            <div class="table-wrap"><table><thead><tr><th>Reference</th><th>Lines</th><th>Debit</th><th>Credit</th><th>Difference</th><th>Status</th></tr></thead><tbody id="journalTable"><tr><td colspan="6" class="empty">No journal analysis yet.</td></tr></tbody></table></div>
+          </div>
+          <div class="panel">
+            <div class="panel-head"><div><strong>Findings</strong><small>Rows and journals to review</small></div><button class="tiny" id="exportIssues">Export CSV</button></div>
+            <div id="findings" class="findings"><div class="empty">No findings yet.</div></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="rules" id="rules">
+        <div class="section-head"><div><span class="eyebrow">BUILT-IN RULES</span><h2>Fast checks for common bookkeeping failures</h2></div></div>
+        <div class="rule-grid">
+          <article><span>01</span><h3>Control balance</h3><p>Compares total debit and credit values across the loaded ledger.</p></article>
+          <article><span>02</span><h3>Journal balance</h3><p>Groups lines by reference and flags entries whose debits and credits do not net to zero.</p></article>
+          <article><span>03</span><h3>Row integrity</h3><p>Checks for invalid amounts, missing account/reference values and rows carrying both debit and credit.</p></article>
+          <article><span>04</span><h3>Duplicate signals</h3><p>Flags exact duplicate accounting rows that may have been imported or posted twice.</p></article>
+        </div>
+      </section>
+
+      <section class="format-section">
+        <div><span class="eyebrow">CSV FORMAT</span><h2>Simple enough to export from almost anything.</h2><p>LedgerCheck uses six fields and tolerates blank debit or credit values. Amounts may include commas if properly CSV-quoted.</p></div>
+        <pre><code>date,reference,account,description,debit,credit
+2026-09-01,JV-1001,1100,Bank,50000,0
+2026-09-01,JV-1001,4000,Sales,0,50000</code></pre>
+      </section>
+
+      <section class="deploy" id="deploy">
+        <div><span class="eyebrow">ZERO-BUILD DEPLOYMENT</span><h2>Drop it onto a subdomain and it runs.</h2><p>LedgerCheck has no database, external API or dependency install. It is suitable for a public demo while keeping the code easy to inspect on GitHub.</p></div>
+        <ol><li><b>Create the subdomain.</b><span>Point <code>ledgercheck.valron.co.ke</code> to its own document root.</span></li><li><b>Upload the files.</b><span>Copy <code>index.html</code> and the <code>assets</code> folder into the root.</span></li><li><b>Enable HTTPS.</b><span>Issue SSL and force secure connections from the hosting panel.</span></li><li><b>Publish to GitHub.</b><span>No credentials are included or required; the demo works immediately.</span></li></ol>
+      </section>
+    </main>
+
+    <footer><span>LedgerCheck · Valron Labs</span><span>Accounting review utility · not a statutory audit tool</span></footer>
+  </div>
+  <script src="assets/app.js"></script>
+</body>
+</html>

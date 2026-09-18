@@ -1,0 +1,11 @@
+date,reference,account,description,debit,credit
+2026-09-01,JV-1001,1100,Bank receipt,50000,0
+2026-09-01,JV-1001,4000,Sales revenue,0,50000
+2026-09-02,JV-1002,5100,Rent expense,65000,0
+2026-09-02,JV-1002,1100,Bank payment,0,65000
+2026-09-03,JV-1003,1200,Customer receivable,88500,0
+2026-09-03,JV-1003,4000,Consulting revenue,0,88500
+2026-09-04,JV-1004,5200,Office supplies,12800,0
+2026-09-04,JV-1004,1100,Bank payment,0,12650
+2026-09-05,JV-1005,1100,Client receipt,70000,0
+2026-09-05,JV-1005,1200,Customer receivable,0,70000

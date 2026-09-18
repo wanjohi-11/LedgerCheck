@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://ledgercheck.valron.co.ke/sitemap.xml
